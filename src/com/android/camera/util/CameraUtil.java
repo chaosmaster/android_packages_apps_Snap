@@ -1419,8 +1419,12 @@ public class CameraUtil {
         CameraMetadataNative requestMetadata = new CameraMetadataNative(request.getNativeCopy());
         // Note that after this step, the requestMetadata is mutated (swapped) and can not be used
         // for next request builder creation.
+        String cameraIdString = String.valueOf(cameraId);
+        Set<String> cameraSet = new TreeSet<String>();
+        cameraSet.add(cameraIdString);
         CaptureRequest.Builder singleTargetRequestBuilder = new CaptureRequest.Builder(
-                requestMetadata, /*reprocess*/false, CameraCaptureSession.SESSION_ID_NONE);
+                requestMetadata, /*reprocess*/false, CameraCaptureSession.SESSION_ID_NONE,
+                cameraIdString, cameraSet);
         singleTargetRequestBuilder.setTag(cameraId);
 
         // Overwrite the capture intent to make sure a good value is set.
@@ -1444,7 +1448,8 @@ public class CameraUtil {
             // CaptureRequest.Builder creation.
             requestMetadata = new CameraMetadataNative(request.getNativeCopy());
             doubleTargetRequestBuilder = new CaptureRequest.Builder(
-                    requestMetadata, /*reprocess*/false, CameraCaptureSession.SESSION_ID_NONE);
+                    requestMetadata, /*reprocess*/false, CameraCaptureSession.SESSION_ID_NONE,
+                    cameraIdString, cameraSet);
             doubleTargetRequestBuilder.setTag(cameraId);
             doubleTargetRequestBuilder.set(CaptureRequest.CONTROL_CAPTURE_INTENT,
                     CaptureRequest.CONTROL_CAPTURE_INTENT_VIDEO_RECORD);
